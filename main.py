@@ -1,5 +1,28 @@
 import pygame
 import os
+import sqlite3
+
+
+def print_results():
+    pth = os.getcwd() + "/results.sqlite3"
+    cur = sqlite3.connect(pth).cursor()
+    results = cur.execute("""SELECT * FROM result""")
+    font = pygame.font.Font(None, 50)
+    screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    i = 0
+    j = 0
+    text_h = 0
+    for res in results:
+        i += 30
+        j += 1
+        text = font.render((res[0] + " -- " + str(res[1])), True, (100, 255, 100))
+        text_x = 1920 // 2 - text.get_width()
+        text_y = 1080 // 2 - text.get_height()
+        text_w = text.get_width()
+        text_h = text.get_height()
+        screen.blit(text, (text_x, text_y + i))
+    pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
+                     (1920 // 2, 1080 // 2 + text_h * j), 3)
 
 
 class Menu:
@@ -33,6 +56,7 @@ class Menu:
         global flag
         flag = 0
         screen.fill('blue')
+        print_results()
         pygame.display.flip()
         pass
 
