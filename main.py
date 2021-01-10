@@ -18,7 +18,6 @@ def print_results():
         text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
         text_x = 1920 // 2 - text.get_width()
         text_y = 1080 // 2 - text.get_height()
-    # text_w = text.get_width()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
@@ -107,16 +106,23 @@ def game():
     all_sprites.add(sprite)
 
     if positkarti > 0:
+        if side == 0:
+            sloy3.image.set_alpha(126)
         all_sprites.add(sloy3)
 
     if positkarti > -960:
+        if side == 0:
+            sloy32.image.set_alpha(126)
         all_sprites.add(sloy32)
 
     if -1920 < positkarti < 960:
+        if side == 0:
+            sloy33.image.set_alpha(126)
         all_sprites.add(sloy33)
 
     if -2880 < positkarti < 0:
-    #    sloy34.image.set_alpha(0)
+        if side == 0:
+            sloy34.image.set_alpha(126)
         all_sprites.add(sloy34)
 
     sprite.rect.x = posit[0]
@@ -141,6 +147,7 @@ def records():
 
 if __name__ == '__main__':
     pygame.init()
+    side = 1
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((1920, 1080))
     color = pygame.Color(255, 0, 0)
@@ -181,7 +188,7 @@ if __name__ == '__main__':
     flag = 1
     flag2 = 1
     while running:
-        clock.tick(100)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -189,6 +196,10 @@ if __name__ == '__main__':
                 if flag == 1:
                     get_click(event.pos)
         if flag == 0:
+            if pygame.key.get_pressed()[pygame.K_w]:
+                side = 1
+            elif pygame.key.get_pressed()[pygame.K_s]:
+                side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
                 if posit[0] - 7 > 190:
                     if positx > 2880:
