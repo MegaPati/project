@@ -39,33 +39,52 @@ def game():
     global flag
     global posit
     global flag2
+    global positkarti
     flag = 0
+    screen.fill('blue')
     all_sprites = pygame.sprite.Group()
-    if flag2 == 0:
-        laysofschool = pygame.sprite.Group()
-        sloy1 = pygame.sprite.Sprite()
-        sloy1.image = pygame.image.load(os.path.join('data', 'sloy_1.png'))
-        sloy1.rect = sloy1.image.get_rect()
-
-        sloy2 = pygame.sprite.Sprite()
-        sloy2.image = pygame.image.load(os.path.join('data', 'sredniy_sloy.png'))
-        sloy2.rect = sloy2.image.get_rect()
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
     sprite.rect = sprite.image.get_rect()
 
-    if flag2 == 0:
-        sloy3 = pygame.sprite.Sprite()
-        sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy.png'))
-        sloy3.rect = sloy3.image.get_rect()
-        flag2 = 1
-        laysofschool.add(sloy1)
-        laysofschool.add(sloy2)
-        laysofschool.add(sloy3)
-        laysofschool.draw(screen)
-    #  pygame.draw.line(screen, color, (0, 900), (1920, 900), 3)
+    sloy1 = pygame.sprite.Sprite()
+    sloy1.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_01.gif'))
+    sloy1.rect = sprite.image.get_rect()
+    sloy1.rect.x = positkarti - 960
+
+    sloy2 = pygame.sprite.Sprite()
+    sloy2.image = pygame.image.load(os.path.join('data', 'sredniy_sloy_lev_01.gif'))
+    sloy2.rect = sprite.image.get_rect()
+    sloy2.rect.x = positkarti - 960
+
+    sloy3 = pygame.sprite.Sprite()
+    sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
+    sloy3.rect = sprite.image.get_rect()
+    sloy3.rect.x = positkarti - 960
+
+    sloy12 = pygame.sprite.Sprite()
+    sloy12.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_02.gif'))
+    sloy12.rect = sprite.image.get_rect()
+    sloy12.rect.x = positkarti
+
+    sloy22 = pygame.sprite.Sprite()
+    sloy22.image = pygame.image.load(os.path.join('data', 'sredniy_sloy_lev_02.gif'))
+    sloy22.rect = sprite.image.get_rect()
+    sloy22.rect.x = positkarti
+
+    sloy32 = pygame.sprite.Sprite()
+    sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
+    sloy32.rect = sprite.image.get_rect()
+    sloy32.rect.x = positkarti
+
+    all_sprites.add(sloy1)
+    all_sprites.add(sloy2)
+    all_sprites.add(sloy12)
+    all_sprites.add(sloy22)
     all_sprites.add(sprite)
+    all_sprites.add(sloy3)
+    all_sprites.add(sloy32)
     sprite.rect.x = posit[0]
     sprite.rect.y = posit[1]
     all_sprites.draw(screen)
@@ -92,7 +111,9 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((1920, 1080))
     color = pygame.Color(255, 0, 0)
     hsv = color.hsva
-    posit = [200, 700]
+    posit = [200, 760]
+    positkarti = 960
+    positx = 200
     chelovek = 'middleman.png'
     color.hsva = (180, hsv[2], hsv[2] * 0, hsv[3])
     pygame.draw.rect(screen, color, (708, 365, 504, 150), 3)
@@ -135,10 +156,21 @@ if __name__ == '__main__':
                     get_click(event.pos)
         if flag == 0:
             if pygame.key.get_pressed()[pygame.K_a]:
-                posit[0] -= 4
+                if posit[0] - 7 > 190:
+                    if positx != posit[0]:
+                        positkarti += 7
+                        positx -= 7
+                    else:
+                        posit[0] -= 7
+                        positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
-                posit[0] += 4
+                if positx != posit[0] or posit[0] > 960:
+                    positkarti -= 7
+                    positx += 7
+                else:
+                    posit[0] += 7
+                    positx += 7
                 chelovek = 'rightman.png'
             else:
                 chelovek = 'middleman.png'
