@@ -8,20 +8,17 @@ def print_results():
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
-    screen.blit(font.render("TOP-5 Dodikov", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
     text_h = 0
-    resu = []
     for res1 in results:
-        resu.append([res1[0], res1[1]])
-    resu = sorted(resu, key=lambda x: (int(x[1]), x[0]), reverse=True)
-    for res1 in resu[:5]:
         i += 30
         j += 1
-        text = font.render((res1[0] + " -- " + str(res1[1])), True, (255, 50, 100))
-        text_x = 1920 // 2 - text.get_width() - 10
+        text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
+        text_x = 1920 // 2 - text.get_width()
         text_y = 1080 // 2 - text.get_height()
+    # text_w = text.get_width()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
@@ -46,7 +43,6 @@ def game():
     flag = 0
     screen.fill('blue')
     all_sprites = pygame.sprite.Group()
-    sprites_questions = pygame.sprite.Group()
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
@@ -111,43 +107,21 @@ def game():
     all_sprites.add(sprite)
 
     if positkarti > 0:
-        if side == 1:
-            sloy3.image.set_alpha(0)
         all_sprites.add(sloy3)
 
     if positkarti > -960:
-        if side == 1:
-            sloy32.image.set_alpha(126)
         all_sprites.add(sloy32)
 
     if -1920 < positkarti < 960:
-        if side == 1:
-            sloy33.image.set_alpha(126)
         all_sprites.add(sloy33)
 
     if -2880 < positkarti < 0:
-        if side == 1:
-            sloy34.image.set_alpha(126)
+    #    sloy34.image.set_alpha(0)
         all_sprites.add(sloy34)
 
     sprite.rect.x = posit[0]
     sprite.rect.y = posit[1]
     all_sprites.draw(screen)
-
-    que1 = pygame.sprite.Sprite()
-    que1.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
-    pygame.draw.circle(que1.image, pygame.Color("red"), (10, 10), 10)
-    que1.rect = que1.image.get_rect()
-    que1.rect.x = positkarti - 960 + 750
-    que1.rect.y = 700
-    sprites_questions.add(que1)
-    if ((posit[0]) < que1.rect.x + 50) and ((posit[0]) > que1.rect.x - 100):
-        pygame.draw.circle(que1.image, pygame.Color("yellow"), (10, 10), 10)
-
-    sprite.rect.x = posit[0]
-    sprite.rect.y = posit[1]
-    all_sprites.draw(screen)
-    sprites_questions.draw(screen)
     pygame.display.flip()
 
 
@@ -167,8 +141,6 @@ def records():
 
 if __name__ == '__main__':
     pygame.init()
-    side = 0
-    obj1 = 1
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((1920, 1080))
     color = pygame.Color(255, 0, 0)
@@ -217,17 +189,7 @@ if __name__ == '__main__':
                 if flag == 1:
                     get_click(event.pos)
         if flag == 0:
-            if pygame.key.get_pressed()[pygame.K_w]:
-                side = 1
-            if pygame.key.get_pressed()[pygame.K_s]:
-                side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
-
-                if obj1 == 1:
-                    print(posit)
-                    if 450 < posit[0] < 620 and 600 < posit[1] < 760:
-                        posit[1] += 10
-
                 if posit[0] - 7 > 190:
                     if positx > 2880:
                         posit[0] -= 7
@@ -241,11 +203,6 @@ if __name__ == '__main__':
                             positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
-
-                if obj1 == 1:
-                    if 450 < posit[0] < 620 and 600 < posit[1] < 760:
-                        posit[1] -= 10
-
                 if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
                     positkarti -= 7
                     positx += 7
