@@ -1,7 +1,6 @@
 import pygame
 import os
 import sqlite3
-os.chdir("project1")
 
 
 def print_results():
