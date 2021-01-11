@@ -1,6 +1,7 @@
 import pygame
 import os
 import sqlite3
+os.chdir("project1")
 
 
 def print_results():
@@ -21,10 +22,8 @@ def print_results():
         i += 30
         j += 1
         text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
-    # text_x = 1920 // 2 - text.get_width()
         text_x = 1920 // 2 - text.get_width() - 20
         text_y = 1080 // 2 - text.get_height()
-    # text_w = text.get_width()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
@@ -75,6 +74,8 @@ def game():
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
         sloy3.rect = sprite.image.get_rect()
         sloy3.rect.x = positkarti - 960
+        if 960 > positkarti > 0:
+            sloy3.rect.y = -10000
 
     if positkarti > -960:
         sloy12 = pygame.sprite.Sprite()
@@ -86,6 +87,8 @@ def game():
         sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
         sloy32.rect = sprite.image.get_rect()
         sloy32.rect.x = positkarti
+        if 900 < posit[0] and positkarti > 0:
+            sloy32.rect.y = -10000
 
     if -1920 < positkarti < 960:
         sloy13 = pygame.sprite.Sprite()
@@ -97,6 +100,8 @@ def game():
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
         sloy33.rect = sprite.image.get_rect()
         sloy33.rect.x = positkarti + 960
+        if -960 < positkarti < 0:
+            sloy33.rect.y = -10000
 
     if -2880 < positkarti < 0:
         sloy14 = pygame.sprite.Sprite()
@@ -108,6 +113,8 @@ def game():
         sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
         sloy34.rect = sprite.image.get_rect()
         sloy34.rect.x = positkarti + 1920
+        if -1920 < positkarti < -960:
+            sloy34.rect.y = -10000
 
     if positkarti > 0:
         all_sprites.add(sloy1)
@@ -231,7 +238,6 @@ if __name__ == '__main__':
                         posit[0] -= 7
                         positx -= 7
                     else:
-                        print(posit[1])
                         if positx != posit[0]:
                             positkarti += 7
                             positx -= 7
