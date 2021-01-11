@@ -9,15 +9,22 @@ def print_results():
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
     screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
     text_h = 0
+    res2 = []
     for res1 in results:
+        res2.append([res1[0], res1[1]])
+    res2 = sorted(res2, reverse=True, key=lambda x: (int(x[1]), x[0]))
+    for res1 in res2[:5]:
         i += 30
         j += 1
         text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
-        text_x = 1920 // 2 - text.get_width()
+    # text_x = 1920 // 2 - text.get_width()
+        text_x = 1920 // 2 - text.get_width() - 20
         text_y = 1080 // 2 - text.get_height()
+    # text_w = text.get_width()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
@@ -42,6 +49,17 @@ def game():
     flag = 0
     screen.fill('blue')
     all_sprites = pygame.sprite.Group()
+    sprites_questions = pygame.sprite.Group()
+
+    que1 = pygame.sprite.Sprite()
+    que1.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
+    pygame.draw.circle(que1.image, pygame.Color("red"), (10, 10), 10)
+    que1.rect = que1.image.get_rect()
+    que1.rect.x = positkarti - 960 + 750
+    que1.rect.y = 700
+    sprites_questions.add(que1)
+    if (posit[0] > que1.rect.x - 100) and (posit[0] < que1.rect.x + 50):
+        pygame.draw.circle(que1.image, pygame.Color("yellow"), (10, 10), 10)
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
@@ -128,6 +146,7 @@ def game():
     sprite.rect.x = posit[0]
     sprite.rect.y = posit[1]
     all_sprites.draw(screen)
+    sprites_questions.draw(screen)
     pygame.display.flip()
 
 
@@ -148,6 +167,7 @@ def records():
 if __name__ == '__main__':
     pygame.init()
     side = 1
+    objects1 = 0
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((1920, 1080))
     color = pygame.Color(255, 0, 0)
@@ -188,7 +208,7 @@ if __name__ == '__main__':
     flag = 1
     flag2 = 1
     while running:
-        clock.tick(60)
+        clock.tick(100)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -201,11 +221,17 @@ if __name__ == '__main__':
             elif pygame.key.get_pressed()[pygame.K_s]:
                 side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
+
+                if objects1 == 0:
+                    if 450 < positx < 650:
+                        posit[1] += 10
+
                 if posit[0] - 7 > 190:
                     if positx > 2880:
                         posit[0] -= 7
                         positx -= 7
                     else:
+                        print(posit[1])
                         if positx != posit[0]:
                             positkarti += 7
                             positx -= 7
@@ -214,12 +240,18 @@ if __name__ == '__main__':
                             positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
-                if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
-                    positkarti -= 7
-                    positx += 7
-                else:
-                    posit[0] += 7
-                    positx += 7
+
+                if objects1 == 0:
+                    if 450 < positx < 600:
+                        posit[1] -= 10
+
+                if positx + 110 < 3790:
+                    if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
+                        positkarti -= 7
+                        positx += 7
+                    else:
+                        posit[0] += 7
+                        positx += 7
                 chelovek = 'rightman.png'
             else:
                 chelovek = 'middleman.png'
