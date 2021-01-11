@@ -1,6 +1,7 @@
 import pygame
 import os
 import sqlite3
+os.chdir("project1")
 
 
 def print_results():
@@ -8,17 +9,21 @@ def print_results():
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
-    screen.blit(font.render("Результаты", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
     text_h = 0
+    res2 = []
     for res1 in results:
+        res2.append([res1[0], res1[1]])
+    res2 = sorted(res2, reverse=True, key=lambda x: (int(x[1]), x[0]))
+    for res1 in res2[:5]:
         i += 30
         j += 1
         text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
-        text_x = 1920 // 2 - text.get_width()
+        text_x = 1920 // 2 - text.get_width() - 20
         text_y = 1080 // 2 - text.get_height()
-        text_w = text.get_width()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
@@ -43,51 +48,112 @@ def game():
     flag = 0
     screen.fill('blue')
     all_sprites = pygame.sprite.Group()
+    sprites_questions = pygame.sprite.Group()
+
+    que1 = pygame.sprite.Sprite()
+    que1.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
+    pygame.draw.circle(que1.image, pygame.Color("red"), (10, 10), 10)
+    que1.rect = que1.image.get_rect()
+    que1.rect.x = positkarti - 960 + 750
+    que1.rect.y = 700
+    sprites_questions.add(que1)
+    if (posit[0] > que1.rect.x - 100) and (posit[0] < que1.rect.x + 50):
+        pygame.draw.circle(que1.image, pygame.Color("yellow"), (10, 10), 10)
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
     sprite.rect = sprite.image.get_rect()
 
-    sloy1 = pygame.sprite.Sprite()
-    sloy1.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_01.gif'))
-    sloy1.rect = sprite.image.get_rect()
-    sloy1.rect.x = positkarti - 960
+    if positkarti > 0:
+        sloy1 = pygame.sprite.Sprite()
+        sloy1.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_01.gif'))
+        sloy1.rect = sprite.image.get_rect()
+        sloy1.rect.x = positkarti - 960
 
-    sloy2 = pygame.sprite.Sprite()
-    sloy2.image = pygame.image.load(os.path.join('data', 'sredniy_sloy_lev_01.gif'))
-    sloy2.rect = sprite.image.get_rect()
-    sloy2.rect.x = positkarti - 960
+        sloy3 = pygame.sprite.Sprite()
+        sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
+        sloy3.rect = sprite.image.get_rect()
+        sloy3.rect.x = positkarti - 960
+        if 960 > positkarti > 0:
+            sloy3.rect.y = -10000
 
-    sloy3 = pygame.sprite.Sprite()
-    sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
-    sloy3.rect = sprite.image.get_rect()
-    sloy3.rect.x = positkarti - 960
+    if positkarti > -960:
+        sloy12 = pygame.sprite.Sprite()
+        sloy12.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_02.gif'))
+        sloy12.rect = sprite.image.get_rect()
+        sloy12.rect.x = positkarti
 
-    sloy12 = pygame.sprite.Sprite()
-    sloy12.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_02.gif'))
-    sloy12.rect = sprite.image.get_rect()
-    sloy12.rect.x = positkarti
+        sloy32 = pygame.sprite.Sprite()
+        sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
+        sloy32.rect = sprite.image.get_rect()
+        sloy32.rect.x = positkarti
+        if 900 < posit[0] and positkarti > 0:
+            sloy32.rect.y = -10000
 
-    sloy22 = pygame.sprite.Sprite()
-    sloy22.image = pygame.image.load(os.path.join('data', 'sredniy_sloy_lev_02.gif'))
-    sloy22.rect = sprite.image.get_rect()
-    sloy22.rect.x = positkarti
+    if -1920 < positkarti < 960:
+        sloy13 = pygame.sprite.Sprite()
+        sloy13.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_03.gif'))
+        sloy13.rect = sprite.image.get_rect()
+        sloy13.rect.x = positkarti + 960
 
-    sloy32 = pygame.sprite.Sprite()
-    sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
-    sloy32.rect = sprite.image.get_rect()
-    sloy32.rect.x = positkarti
+        sloy33 = pygame.sprite.Sprite()
+        sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
+        sloy33.rect = sprite.image.get_rect()
+        sloy33.rect.x = positkarti + 960
+        if -960 < positkarti < 0:
+            sloy33.rect.y = -10000
 
-    all_sprites.add(sloy1)
-    all_sprites.add(sloy2)
-    all_sprites.add(sloy12)
-    all_sprites.add(sloy22)
+    if -2880 < positkarti < 0:
+        sloy14 = pygame.sprite.Sprite()
+        sloy14.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_04.gif'))
+        sloy14.rect = sprite.image.get_rect()
+        sloy14.rect.x = positkarti + 1920
+
+        sloy34 = pygame.sprite.Sprite()
+        sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
+        sloy34.rect = sprite.image.get_rect()
+        sloy34.rect.x = positkarti + 1920
+        if -1920 < positkarti < -960:
+            sloy34.rect.y = -10000
+
+    if positkarti > 0:
+        all_sprites.add(sloy1)
+
+    if positkarti > -960:
+        all_sprites.add(sloy12)
+
+    if -1920 < positkarti < 960:
+        all_sprites.add(sloy13)
+
+    if -2880 < positkarti < 0:
+        all_sprites.add(sloy14)
+
     all_sprites.add(sprite)
-    all_sprites.add(sloy3)
-    all_sprites.add(sloy32)
+
+    if positkarti > 0:
+        if side == 0:
+            sloy3.image.set_alpha(126)
+        all_sprites.add(sloy3)
+
+    if positkarti > -960:
+        if side == 0:
+            sloy32.image.set_alpha(126)
+        all_sprites.add(sloy32)
+
+    if -1920 < positkarti < 960:
+        if side == 0:
+            sloy33.image.set_alpha(126)
+        all_sprites.add(sloy33)
+
+    if -2880 < positkarti < 0:
+        if side == 0:
+            sloy34.image.set_alpha(126)
+        all_sprites.add(sloy34)
+
     sprite.rect.x = posit[0]
     sprite.rect.y = posit[1]
     all_sprites.draw(screen)
+    sprites_questions.draw(screen)
     pygame.display.flip()
 
 
@@ -107,6 +173,8 @@ def records():
 
 if __name__ == '__main__':
     pygame.init()
+    side = 1
+    objects1 = 0
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((1920, 1080))
     color = pygame.Color(255, 0, 0)
@@ -155,22 +223,41 @@ if __name__ == '__main__':
                 if flag == 1:
                     get_click(event.pos)
         if flag == 0:
+            if pygame.key.get_pressed()[pygame.K_w]:
+                side = 1
+            elif pygame.key.get_pressed()[pygame.K_s]:
+                side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
+
+                if objects1 == 0:
+                    if 450 < positx < 650:
+                        posit[1] += 10
+
                 if posit[0] - 7 > 190:
-                    if positx != posit[0]:
-                        positkarti += 7
-                        positx -= 7
-                    else:
+                    if positx > 2880:
                         posit[0] -= 7
                         positx -= 7
+                    else:
+                        if positx != posit[0]:
+                            positkarti += 7
+                            positx -= 7
+                        else:
+                            posit[0] -= 7
+                            positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
-                if positx != posit[0] or posit[0] > 960:
-                    positkarti -= 7
-                    positx += 7
-                else:
-                    posit[0] += 7
-                    positx += 7
+
+                if objects1 == 0:
+                    if 450 < positx < 600:
+                        posit[1] -= 10
+
+                if positx + 110 < 3790:
+                    if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
+                        positkarti -= 7
+                        positx += 7
+                    else:
+                        posit[0] += 7
+                        positx += 7
                 chelovek = 'rightman.png'
             else:
                 chelovek = 'middleman.png'
