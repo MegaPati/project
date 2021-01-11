@@ -58,7 +58,10 @@ def game():
     que1.rect.y = 700
     sprites_questions.add(que1)
     if (posit[0] > que1.rect.x - 100) and (posit[0] < que1.rect.x + 50):
-        pygame.draw.circle(que1.image, pygame.Color("yellow"), (10, 10), 10)
+        que1.image = pygame.image.load(os.path.join('data', 'good_luck.png'))
+        que1.rect = que1.image.get_rect()
+        que1.rect.x = positkarti - 960 + 750
+        que1.rect.y = 700
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
