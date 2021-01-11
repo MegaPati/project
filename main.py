@@ -1,7 +1,6 @@
 import pygame
 import os
 import sqlite3
-os.chdir("project1")
 
 
 def print_results():
@@ -9,7 +8,7 @@ def print_results():
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
-    screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
+    #screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
@@ -58,7 +57,10 @@ def game():
     que1.rect.y = 700
     sprites_questions.add(que1)
     if (posit[0] > que1.rect.x - 100) and (posit[0] < que1.rect.x + 50):
-        pygame.draw.circle(que1.image, pygame.Color("yellow"), (10, 10), 10)
+        que1.image = pygame.image.load(os.path.join('data', 'good_luck.png'))
+        que1.rect = que1.image.get_rect()
+        que1.rect.x = positkarti - 960 + 750
+        que1.rect.y = 700
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
@@ -230,8 +232,8 @@ if __name__ == '__main__':
             if pygame.key.get_pressed()[pygame.K_a]:
 
                 if objects1 == 0:
-                    if 450 < positx < 650:
-                        posit[1] += 10
+                    if (450 < positx < 650) and (525 < posit[1] < 760):
+                        posit[1] += 7
 
                 if posit[0] - 7 > 190:
                     if positx > 2880:
@@ -248,11 +250,12 @@ if __name__ == '__main__':
             elif pygame.key.get_pressed()[pygame.K_d]:
 
                 if objects1 == 0:
-                    if 450 < positx < 600:
-                        posit[1] -= 10
+                    if ((450 < positx < 650) and (posit[1] > 625)) or ((3350 < positx < 3800) and (posit[1] > 275)):
+                        print(posit[1])
+                        posit[1] -= 8
 
-                if positx + 110 < 3790:
-                    if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
+                if positx + 110 < 3800:
+                    if (positx != posit[0] or posit[0] > 960) and positkarti > -955:
                         positkarti -= 7
                         positx += 7
                     else:
