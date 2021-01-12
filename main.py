@@ -1,6 +1,8 @@
 import pygame
+from pygame.locals import *
 import os
 import sqlite3
+from tkinter import Tk
 
 
 def print_results():
@@ -8,8 +10,6 @@ def print_results():
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
-    #screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
-    #yes
     screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
@@ -21,7 +21,7 @@ def print_results():
     for res1 in res2[:5]:
         i += 30
         j += 1
-        text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
+        text = font.render((res1[0] + " -- " + str(res1[1])), True, (200, 0, 0))
         text_x = 1920 // 2 - text.get_width() - 20
         text_y = 1080 // 2 - text.get_height()
         text_h = text.get_height()
@@ -77,8 +77,6 @@ def game():
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
         sloy3.rect = sprite.image.get_rect()
         sloy3.rect.x = positkarti - 960
-        if 960 > positkarti > 0:
-            sloy3.rect.y = -10000
 
     if positkarti > -960:
         sloy12 = pygame.sprite.Sprite()
@@ -103,7 +101,7 @@ def game():
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
         sloy33.rect = sprite.image.get_rect()
         sloy33.rect.x = positkarti + 960
-        if -960 < positkarti < 0:
+        if -930 < positkarti < 0:
             sloy33.rect.y = -10000
 
     if -2880 < positkarti < 0:
@@ -116,7 +114,7 @@ def game():
         sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
         sloy34.rect = sprite.image.get_rect()
         sloy34.rect.x = positkarti + 1920
-        if -1920 < positkarti < -960:
+        if -1920 < positkarti < -930:
             sloy34.rect.y = -10000
 
     if positkarti > 0:
@@ -179,7 +177,9 @@ if __name__ == '__main__':
     side = 1
     objects1 = 0
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((1920, 1080))
+    sc = Tk()
+    Size = Width, Height = sc.winfo_screenwidth(), sc.winfo_screenheight()
+    screen = pygame.display.set_mode(Size, FULLSCREEN)
     color = pygame.Color(255, 0, 0)
     hsv = color.hsva
     posit = [200, 760]
@@ -229,39 +229,69 @@ if __name__ == '__main__':
             if pygame.key.get_pressed()[pygame.K_w]:
                 side = 1
             elif pygame.key.get_pressed()[pygame.K_s]:
-                side = 0
+                if positx > 3340 or posit[1] < 275:
+                    side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
 
                 if objects1 == 0:
-                    if (450 < positx < 650) and (525 < posit[1] < 760):
-                        posit[1] += 7
-
-                if posit[0] - 7 > 190:
-                    if positx > 2880:
-                        posit[0] -= 7
-                        positx -= 7
+                    if side == 1:
+                        if (450 < positx < 650) and (525 < posit[1] < 760):
+                            posit[1] += 7
                     else:
-                        if positx != posit[0]:
-                            positkarti += 7
-                            positx -= 7
-                        else:
+                        if (3350 < positx < 3750) and ((posit[1]) < 625):
+                            posit[1] += 7
+
+                if side == 1:
+                    if posit[0] - 7 > 190:
+                        if positx > 2880:
                             posit[0] -= 7
                             positx -= 7
+                        else:
+                            if positx != posit[0]:
+                                positkarti += 7
+                                positx -= 7
+                            else:
+                                posit[0] -= 7
+                                positx -= 7
+                else:
+                    if posit[0] - 7 > 950:
+                        if positx > 2880:
+                            posit[0] -= 7
+                            positx -= 7
+                        else:
+                            if positx != posit[0]:
+                                positkarti += 7
+                                positx -= 7
+                            else:
+                                posit[0] -= 7
+                                positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
 
                 if objects1 == 0:
-                    if ((450 < positx < 650) and (posit[1] > 625)) or ((3350 < positx < 3800) and (posit[1] > 275)):
-                        print(posit[1])
-                        posit[1] -= 8
-
-                if positx + 110 < 3800:
-                    if (positx != posit[0] or posit[0] > 960) and positkarti > -955:
-                        positkarti -= 7
-                        positx += 7
+                    if side == 1:
+                        if (450 < positx < 650) and (posit[1] > 625):
+                            posit[1] -= 7
                     else:
-                        posit[0] += 7
-                        positx += 7
+                        if (3350 < positx < 3750) and (posit[1] > 275):
+                            posit[1] -= 7
+
+                if side == 1:
+                    if positx + 110 < 3450:
+                        if (positx != posit[0] or posit[0] > 960) and positkarti > -955:
+                            positkarti -= 7
+                            positx += 7
+                        else:
+                            posit[0] += 7
+                            positx += 7
+                else:
+                    if positx + 110 < 3700:
+                        if (positx != posit[0] or posit[0] > 960) and positkarti > -955:
+                            positkarti -= 7
+                            positx += 7
+                        elif posit[0] < 1750:
+                            posit[0] += 7
+
                 chelovek = 'rightman.png'
             else:
                 chelovek = 'middleman.png'
