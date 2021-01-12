@@ -8,7 +8,6 @@ def print_results():
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     font = pygame.font.Font(None, 50)
-    screen.blit(font.render("Dodiki", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
     i = 0
     j = 0
@@ -20,7 +19,7 @@ def print_results():
     for res1 in res2[:5]:
         i += 30
         j += 1
-        text = font.render((res1[0] + " -- " + str(res1[1])), True, (100, 255, 100))
+        text = font.render((res1[0] + " -- " + str(res1[1])), True, (200, 0, 0))
         text_x = 1920 // 2 - text.get_width() - 20
         text_y = 1080 // 2 - text.get_height()
         text_h = text.get_height()
@@ -76,8 +75,6 @@ def game():
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
         sloy3.rect = sprite.image.get_rect()
         sloy3.rect.x = positkarti - 960
-        if 960 > positkarti > 0:
-            sloy3.rect.y = -10000
 
     if positkarti > -960:
         sloy12 = pygame.sprite.Sprite()
@@ -102,7 +99,7 @@ def game():
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
         sloy33.rect = sprite.image.get_rect()
         sloy33.rect.x = positkarti + 960
-        if -960 < positkarti < 0:
+        if -930 < positkarti < 0:
             sloy33.rect.y = -10000
 
     if -2880 < positkarti < 0:
@@ -115,7 +112,7 @@ def game():
         sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
         sloy34.rect = sprite.image.get_rect()
         sloy34.rect.x = positkarti + 1920
-        if -1920 < positkarti < -960:
+        if -1920 < positkarti < -930:
             sloy34.rect.y = -10000
 
     if positkarti > 0:
@@ -232,8 +229,8 @@ if __name__ == '__main__':
             if pygame.key.get_pressed()[pygame.K_a]:
 
                 if objects1 == 0:
-                    if 450 < positx < 650:
-                        posit[1] += 10
+                    if (450 < positx < 650) and (525 < posit[1] < 760):
+                        posit[1] += 7
 
                 if posit[0] - 7 > 190:
                     if positx > 2880:
@@ -250,11 +247,11 @@ if __name__ == '__main__':
             elif pygame.key.get_pressed()[pygame.K_d]:
 
                 if objects1 == 0:
-                    if 450 < positx < 600:
-                        posit[1] -= 10
+                    if ((450 < positx < 650) and (posit[1] > 625)) or ((3350 < positx < 3800) and (posit[1] > 275)):
+                        posit[1] -= 8
 
-                if positx + 110 < 3790:
-                    if (positx != posit[0] or posit[0] > 960) and positkarti > -1145:
+                if positx + 110 < 3800:
+                    if (positx != posit[0] or posit[0] > 960) and positkarti > -955:
                         positkarti -= 7
                         positx += 7
                     else:
