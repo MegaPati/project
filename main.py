@@ -28,6 +28,16 @@ def print_results():
                      (1920 // 2, 1080 // 2 + text_h * j), 3)
 
 
+def load_questions():
+    pth = os.getcwd() + "/quesions.sqlite3"
+    cur = sqlite3.connect(pth).cursor()
+    results = cur.execute("""SELECT * FROM question""")
+    s = []
+    for res2 in results:
+        s.append([res2[1], res2[-1]])
+    return s
+
+
 def get_click(pos):
     global flag2
     if 708 < pos[0] < 1212 and 365 < pos[1] < 515:
@@ -36,6 +46,31 @@ def get_click(pos):
         game()
     if 540 < pos[0] < 1380 and 565 < pos[1] < 715:
         records()
+
+
+class Question(pygame.sprite.Sprite):
+    def __init__(self, x, y, sprites_questions, question):
+        super().__init__(sprites_questions)
+        self.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
+        pygame.draw.circle(self.image, pygame.Color("white"), (1, 1), 1)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.x = x
+        self.rect.y = y
+        self.question = question[0]
+        self.right = question[1]
+        self.answer = -1
+
+    def update_status(self, answer):
+        if answer == -1:
+            self.image = pygame.image.load(os.path.join('data', 'good_luck.png'))
+            self.rect = self.image.get_rect()
+            self.rect.x = self.x
+            self.rect.y = 700
+        if answer == 0:
+            pass  # wrong
+        else:
+            pass  # right
 
 
 def game():
@@ -47,19 +82,12 @@ def game():
     screen.fill('blue')
     all_sprites = pygame.sprite.Group()
     sprites_questions = pygame.sprite.Group()
+    print(positkarti, posit[0])
+    questions = load_questions()
 
-    que1 = pygame.sprite.Sprite()
-    que1.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
-    pygame.draw.circle(que1.image, pygame.Color("red"), (10, 10), 10)
-    que1.rect = que1.image.get_rect()
-    que1.rect.x = positkarti - 960 + 750
-    que1.rect.y = 700
-    sprites_questions.add(que1)
-    if (posit[0] > que1.rect.x - 100) and (posit[0] < que1.rect.x + 50):
-        que1.image = pygame.image.load(os.path.join('data', 'good_luck.png'))
-        que1.rect = que1.image.get_rect()
-        que1.rect.x = positkarti - 960 + 750
-        que1.rect.y = 700
+    good_luck = Question(positkarti - 960 + 750, 700, sprites_questions, ["GoodLuck!", 1])
+    if (posit[0] > good_luck.rect.x - 100) and (posit[0] < good_luck.rect.x + 50):
+        good_luck.update_status(-1)
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
@@ -71,6 +99,13 @@ def game():
         sloy1.rect = sprite.image.get_rect()
         sloy1.rect.x = positkarti - 960
 
+        que0 = Question(positkarti - 960 + 1200, 700, sprites_questions, questions[0])
+        if 700 < positkarti < 800:
+            que0.update_status(que0.answer)
+        que1 = Question(positkarti - 960 + 1600, 700, sprites_questions, questions[1])
+        if 300 < positkarti < 400:
+            que1.update_status(que1.answer)
+
         sloy3 = pygame.sprite.Sprite()
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
         sloy3.rect = sprite.image.get_rect()
@@ -81,6 +116,13 @@ def game():
         sloy12.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_02.gif'))
         sloy12.rect = sprite.image.get_rect()
         sloy12.rect.x = positkarti
+
+        que2 = Question(positkarti - 960 + 2000, 700, sprites_questions, questions[2])
+        if -100 < positkarti < 0:
+            que2.update_status(que2.answer)
+        que3 = Question(positkarti - 960 + 2400, 700, sprites_questions, questions[3])
+        if -500 < positkarti < -400:
+            que3.update_status(que3.answer)
 
         sloy32 = pygame.sprite.Sprite()
         sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
@@ -94,6 +136,13 @@ def game():
         sloy13.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_03.gif'))
         sloy13.rect = sprite.image.get_rect()
         sloy13.rect.x = positkarti + 960
+
+        que4 = Question(positkarti - 960 + 2800, 700, sprites_questions, questions[2])
+        if -900 < positkarti < -800:
+            que4.update_status(que4.answer)
+        que5 = Question(positkarti - 960 + 3180, 700, sprites_questions, questions[3])
+        if (positkarti == -958) and (1150 < posit[0] < 1250):
+            que5.update_status(que5.answer)
 
         sloy33 = pygame.sprite.Sprite()
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
