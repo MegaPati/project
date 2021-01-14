@@ -289,6 +289,1033 @@ def records():
     pygame.display.flip()
 
 
+def vivod(rights_answer):
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('Поздравляю, ваш результат: ' + str(rights_answer) + ' / 13', True, 'black')
+    text_x2 = 650
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion13(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 550
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('"Школа города"', True, 'black')
+    text_x2 = 560
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        cur.execute('''INSERT INTO result(name, result) VALUES (?, ?)''',
+                                    (nick, rights_answer))
+                        con.commit()
+                        # доб в бд
+                        vivod(rights_answer)
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        cur.execute('''INSERT INTO result(name, result) VALUES (?, ?)''',
+                                    (nick, rights_answer))
+                        # доб в бд
+                        con.commit()
+                        vivod(rights_answer)
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion12(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 200
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2005', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion13(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion13(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion11(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 75
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2012', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion12(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion12(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion10(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 200
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2013', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion11(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion11(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion9(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 150
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2015', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion10(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion10(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion8(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 70
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2003', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion9(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion9(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion7(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 550
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2009', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion8(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion8(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion6(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 550
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1000
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('"Школа Кировского района"', True, 'black')
+    text_x2 = 360
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion7(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion7(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion5(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 35
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2005', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion6(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion6(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion4(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 580
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('2001', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion5(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion5(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion3(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 580
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('Школа с углублённым изучением Рус и Лит-ры', True, 'black')
+    text_x2 = 50
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion4(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion4(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion2(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 620
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('Школа с углублённым изучением ИЗО', True, 'black')
+    text_x2 = 195
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion3(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion3(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
+def level_queistion(nick, rights_answer, n):
+    con = sqlite3.connect('results.sqlite3')
+    cur = con.cursor()
+    con1 = sqlite3.connect('quesions.sqlite3')
+    # открытие бд
+    cur1 = con1.cursor()
+    question = cur1.execute("""SELECT * FROM question""").fetchall()
+    quest, key_quest = [], []
+    # подключение к бд
+    for i in question:
+        quest.append(i[1])
+        key_quest.append(str(i[2]))
+    # сортировка бд
+    pygame.init()
+    pygame.display.set_caption('Start')
+    window_surface = pygame.display.set_mode((1920, 1080))
+    # создание окна
+
+    background = pygame.Surface((1920, 1080))
+    # отрисовка фона
+
+    background.fill(pygame.Color('white'))
+    # заливка фона
+
+    manager = pygame_gui.UIManager((1920, 1080))
+
+    button_answer1 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((750, 550), (100, 50)),
+        text='1',
+        manager=manager
+    )
+
+    button_answer2 = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((1000, 550), (100, 50)),
+        text='2',
+        manager=manager
+    )
+    # создание кнопок с вариантами ответов
+
+    font = pygame.font.Font(None, 50)
+    text = font.render(quest[n], True, 'black')
+    text_x = 720
+    text_y = 450
+    background.blit(text, (text_x, text_y))
+    font1 = pygame.font.Font(None, 50)
+    text1 = font1.render(key_quest[n], True, 'black')
+    text_x1 = 1010
+    text_y1 = 500
+    background.blit(text1, (text_x1, text_y1))
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('1980', True, 'black')
+    text_x2 = 760
+    text_y2 = 500
+    background.blit(text2, (text_x2, text_y2))
+    # написание текста
+
+    while True:
+        time_delta = clock.tick(60) / 1000.0
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button_answer1:
+                        rights_answer += 0
+                        level_queistion2(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+                    if event.ui_element == button_answer2:
+                        rights_answer += 1
+                        level_queistion2(nick, rights_answer, n + 1)
+                        # переход к след вопросу
+            manager.process_events(event)
+
+        manager.update(time_delta)
+        window_surface.blit(background, (0, 0))
+        manager.draw_ui(window_surface)
+        pygame.display.update()
+
+
 def namefunc():
     pygame.init()
     # создание нового окна
@@ -349,7 +1376,7 @@ def namefunc():
                             continue
                         # если имени нет то ничего не происходит
                         if ima not in imena:
-                            pass    # название функции
+                            level_queistion(ima, 0, 0)    # название функции
                         # запуск теста
             manager.process_events(event)
 
