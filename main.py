@@ -243,6 +243,17 @@ def records():
     pygame.display.flip()
 
 
+def level2():
+    while True:
+        screen.fill('white')
+        font = pygame.font.Font(None, 50)
+        text = font.render("To Be Continued", True, 'black')
+        text_x = 1920 // 2 - text.get_width() // 2
+        text_y = 1080 // 2 - text.get_height() // 2
+        screen.blit(text, (text_x, text_y))
+        pygame.display.flip()
+
+
 if __name__ == '__main__':
     pygame.init()
     side = 1
@@ -296,9 +307,8 @@ if __name__ == '__main__':
                     get_click(event.pos)
         if flag == 0:
             if pygame.key.get_pressed()[pygame.K_a]:
-
                 if positx < 970 and 250 < posit[1] < 300:
-                    continue
+                    level2()
 
                 if objects1 == 0:
                     if 1400 < posit[0] < 1775 and pygame.key.get_pressed()[pygame.K_s] and 615 > posit[1]:
