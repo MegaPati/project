@@ -61,12 +61,15 @@ class Question(pygame.sprite.Sprite):
         self.right = question[1]
         self.answer = -1
 
-    def update_status(self, answer):
+    def update_status(self, answer, y, picture):
         if answer == -1:
-            self.image = pygame.image.load(os.path.join('data', 'good_luck.png'))
+            self.image = pygame.image.load(os.path.join('data', picture))
             self.rect = self.image.get_rect()
-            self.rect.x = self.x
-            self.rect.y = 700
+            if picture == '8sentence.png':
+                self.rect.x = self.x - 320
+            else:
+                self.rect.x = self.x
+            self.rect.y = y
         if answer == 0:
             pass  # wrong
         else:
@@ -82,12 +85,11 @@ def game():
     screen.fill('blue')
     all_sprites = pygame.sprite.Group()
     sprites_questions = pygame.sprite.Group()
-    print(positkarti, posit[0])
     questions = load_questions()
 
-    good_luck = Question(positkarti - 960 + 750, 700, sprites_questions, ["GoodLuck!", 1])
+    good_luck = Question(positkarti - 960 + 750, 700, sprites_questions, ["Good-Luck", 1])
     if (posit[0] > good_luck.rect.x - 100) and (posit[0] < good_luck.rect.x + 50):
-        good_luck.update_status(-1)
+        good_luck.update_status(-1, 700, '1sentence.png')
 
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
@@ -100,11 +102,17 @@ def game():
         sloy1.rect.x = positkarti - 960
 
         que0 = Question(positkarti - 960 + 1200, 700, sprites_questions, questions[0])
-        if 700 < positkarti < 800:
-            que0.update_status(que0.answer)
+        if 700 < positkarti < 800 and posit[1] > 400:
+            que0.update_status(que0.answer, 700, '2sentence.png')
         que1 = Question(positkarti - 960 + 1600, 700, sprites_questions, questions[1])
-        if 300 < positkarti < 400:
-            que1.update_status(que1.answer)
+        if 300 < positkarti < 400 and posit[1] > 400:
+            que1.update_status(que1.answer, 700, '3sentence.png')
+        que2 = Question(positkarti - 960 + 1600, 340, sprites_questions, questions[2])
+        if 300 < positkarti < 400 and posit[1] < 400:
+            que2.update_status(que2.answer, 340, '13sentence.png')
+        que3 = Question(positkarti - 960 + 1200, 340, sprites_questions, questions[3])
+        if 700 < positkarti < 800 and posit[1] < 400:
+            que3.update_status(que3.answer, 340, '14sentence.png')
 
         sloy3 = pygame.sprite.Sprite()
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
@@ -117,12 +125,18 @@ def game():
         sloy12.rect = sprite.image.get_rect()
         sloy12.rect.x = positkarti
 
-        que2 = Question(positkarti - 960 + 2000, 700, sprites_questions, questions[2])
-        if -100 < positkarti < 0:
-            que2.update_status(que2.answer)
-        que3 = Question(positkarti - 960 + 2400, 700, sprites_questions, questions[3])
-        if -500 < positkarti < -400:
-            que3.update_status(que3.answer)
+        que5 = Question(positkarti - 960 + 2000, 700, sprites_questions, questions[0])
+        if -100 < positkarti < 0 and posit[1] > 400:
+            que5.update_status(que5.answer, 700, '4sentence.png')
+        que6 = Question(positkarti - 960 + 2400, 700, sprites_questions, questions[1])
+        if -500 < positkarti < -400 and posit[1] > 400:
+            que6.update_status(que6.answer, 700, '5sentence.png')
+        que7 = Question(positkarti - 960 + 2000, 700, sprites_questions, questions[2])
+        if -100 < positkarti < 0 and posit[1] < 400:
+            que7.update_status(que7.answer, 340, '12sentence.png')
+        que8 = Question(positkarti - 960 + 2400, 700, sprites_questions, questions[3])
+        if -500 < positkarti < -400 and posit[1] < 400:
+            que8.update_status(que8.answer, 340, '11sentence.png')
 
         sloy32 = pygame.sprite.Sprite()
         sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
@@ -137,12 +151,18 @@ def game():
         sloy13.rect = sprite.image.get_rect()
         sloy13.rect.x = positkarti + 960
 
-        que4 = Question(positkarti - 960 + 2800, 700, sprites_questions, questions[2])
-        if -900 < positkarti < -800:
-            que4.update_status(que4.answer)
-        que5 = Question(positkarti - 960 + 3180, 700, sprites_questions, questions[3])
-        if (positkarti == -958) and (1150 < posit[0] < 1250):
-            que5.update_status(que5.answer)
+        que9 = Question(positkarti - 960 + 2800, 700, sprites_questions, questions[2])
+        if -900 < positkarti < -800 and posit[1] > 400:
+            que9.update_status(que9.answer, 700, '6sentence.png')
+        que10 = Question(positkarti - 960 + 3180, 700, sprites_questions, questions[3])
+        if (positkarti == -958) and (1150 < posit[0] < 1250) and posit[1] > 400:
+            que10.update_status(que10.answer, 700, '7sentence.png')
+        que11 = Question(positkarti - 960 + 2800, 700, sprites_questions, questions[2])
+        if -900 < positkarti < -800 and posit[1] < 400:
+            que11.update_status(que11.answer, 340, '10sentence.png')
+        que12 = Question(positkarti - 960 + 3180, 700, sprites_questions, questions[3])
+        if (positkarti == -958) and (1150 < posit[0] < 1250) and posit[1] < 400:
+            que12.update_status(que12.answer, 340, '9sentence.png')
 
         sloy33 = pygame.sprite.Sprite()
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
@@ -156,6 +176,10 @@ def game():
         sloy14.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_04.gif'))
         sloy14.rect = sprite.image.get_rect()
         sloy14.rect.x = positkarti + 1920
+
+        que13 = Question(positkarti - 960 + 3560, 700, sprites_questions, questions[3])
+        if (positkarti == -958) and (1600 < posit[0] < 1700) and posit[1] < 400:
+            que13.update_status(que13.answer, 340, '8sentence.png')
 
         sloy34 = pygame.sprite.Sprite()
         sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
@@ -271,27 +295,41 @@ if __name__ == '__main__':
                 if flag == 1:
                     get_click(event.pos)
         if flag == 0:
-            if pygame.key.get_pressed()[pygame.K_w]:
-                side = 1
-            elif pygame.key.get_pressed()[pygame.K_s]:
-                side = 0
             if pygame.key.get_pressed()[pygame.K_a]:
 
+                if positx < 970 and 250 < posit[1] < 300:
+                    continue
+
                 if objects1 == 0:
-                    if (450 < positx < 650) and (525 < posit[1] < 760):
+                    if 1400 < posit[0] < 1775 and pygame.key.get_pressed()[pygame.K_s] and 615 > posit[1]:
                         posit[1] += 7
+                    else:
+                        if (450 < positx < 650) and (525 < posit[1] < 760):
+                            posit[1] += 7
 
                 if posit[0] - 7 > 190:
                     if positx > 2880:
-                        posit[0] -= 7
-                        positx -= 7
+                        if 1000 < posit[0] < 1775 and 615 > posit[1]:
+                            if pygame.key.get_pressed()[pygame.K_s]:
+                                posit[0] -= 7
+                                positx -= 7
+                            elif posit[1] == 272 or posit[1] == 270 or posit[1] == 274 or posit[1] == 269:
+                                posit[0] -= 7
+                                positx -= 7
+                        else:
+                            posit[0] -= 7
+                            positx -= 7
                     else:
                         if positx != posit[0]:
                             positkarti += 7
                             positx -= 7
                         else:
-                            posit[0] -= 7
-                            positx -= 7
+                            if positx != posit[0]:
+                                positkarti += 7
+                                positx -= 7
+                            else:
+                                posit[0] -= 7
+                                positx -= 7
                 chelovek = 'leftman.png'
             elif pygame.key.get_pressed()[pygame.K_d]:
 
