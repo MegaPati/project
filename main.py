@@ -6,13 +6,16 @@ import pygame_gui
 
 
 def print_results():
+    """Функция, печатающая топ-5 на экран из бд"""
     pth = os.getcwd() + "/results.sqlite3"
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM result""")
     # подключение бд
+
     font = pygame.font.Font(None, 50)
     screen.blit(font.render("ТОП-5 лучших игроков", True, (0, 0, 0)), (1920 // 2 + 10, 1080 // 2))
-    # надпись
+    # надпись про топ-5 игроков
+
     i = 0
     j = 0
     text_h = 0
@@ -20,7 +23,8 @@ def print_results():
     for res1 in results:
         res2.append([res1[0], res1[1]])
     res2 = sorted(res2, reverse=True, key=lambda x: (int(x[1]), x[0]))
-    # сортировка резулльтатов
+    # сортировка резулльтатов из бд
+
     for res1 in res2[:5]:
         i += 30
         j += 1
@@ -29,43 +33,50 @@ def print_results():
         text_y = 1080 // 2 - text.get_height()
         text_h = text.get_height()
         screen.blit(text, (text_x, text_y + i))
-    # определение координат
+        # нанесение текста про игроков
+
     pygame.draw.line(screen, "black", (1920 // 2, 1080 // 2),
                      (1920 // 2, 1080 // 2 + text_h * j), 3)
     # линия разделитель
 
 
 def load_questions():
+    """Функция, возвращающая вопросы и ответы из бд"""
     pth = os.getcwd() + "/quesions.sqlite3"
     cur = sqlite3.connect(pth).cursor()
     results = cur.execute("""SELECT * FROM question""")
     # подключение бд
+
     s = []
     for res2 in results:
         s.append([res2[1], res2[-1]])
-    # возврат результата
+    # возврат результата (вопрос - ответ)
     return s
 
 
 def get_click(pos):
+    """Фукнция, обрабатывающая клик мышки"""
     global flag2
-    # определение координат мышки
+
     if 708 < pos[0] < 1212 and 365 < pos[1] < 515:
         flag2 = 0
         screen.fill('blue')
         # если клик сделан в эту область начинается игра
         game()
+
     if 540 < pos[0] < 1380 and 565 < pos[1] < 715:
         # запускается функция показывающая рекорды
         records()
 
 
 class Question(pygame.sprite.Sprite):
+    """Класс, реализующий таблички с информацией"""
     def __init__(self, x, y, sprites_questions, question):
         super().__init__(sprites_questions)
+        # добавляем табличку в группу спрайтов
         self.image = pygame.Surface((2 * 10, 2 * 10), pygame.SRCALPHA, 32)
         pygame.draw.circle(self.image, pygame.Color("white"), (1, 1), 1)
-        # рисуется маленький круг
+        # рисуется маленький круг, при приближении к которому табличка открывается
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.x = x
@@ -76,6 +87,7 @@ class Question(pygame.sprite.Sprite):
         self.answer = -1
 
     def update_status(self, answer, y, picture):
+        """Срабатывает при подходе к табличке"""
         if answer == -1:
             # загрузка картинки
             self.image = pygame.image.load(os.path.join('data', picture))
@@ -93,6 +105,7 @@ class Question(pygame.sprite.Sprite):
 
 
 def game():
+    """Функция - основная игра, загрузка слоёв"""
     global flag
     global posit
     global flag2
@@ -113,8 +126,8 @@ def game():
     sprite = pygame.sprite.Sprite()
     sprite.image = pygame.image.load(os.path.join('data', chelovek))
     sprite.rect = sprite.image.get_rect()
-
     # загрузка игрока
+
     if positkarti > 0:
         sloy1 = pygame.sprite.Sprite()
         sloy1.image = pygame.image.load(os.path.join('data', 'sloy_1_lev_1_01.gif'))
@@ -134,7 +147,7 @@ def game():
         que3 = Question(positkarti - 960 + 1200, 340, sprites_questions, questions[3])
         if 700 < positkarti < 800 and posit[1] < 400:
             que3.update_status(que3.answer, 340, '14sentence.png')
-        #  загрузка картинок
+        #  загрузка картинок-табличек с информацией
 
         sloy3 = pygame.sprite.Sprite()
         sloy3.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_01.gif'))
@@ -161,7 +174,7 @@ def game():
         que8 = Question(positkarti - 960 + 2400, 700, sprites_questions, questions[3])
         if -500 < positkarti < -400 and posit[1] < 400:
             que8.update_status(que8.answer, 340, '11sentence.png')
-        #  загрузка картинок
+        #  загрузка картинок-табличек с информацией
 
         sloy32 = pygame.sprite.Sprite()
         sloy32.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_02.gif'))
@@ -190,7 +203,7 @@ def game():
         que12 = Question(positkarti - 960 + 3180, 700, sprites_questions, questions[3])
         if (positkarti == -958) and (1150 < posit[0] < 1250) and posit[1] < 400:
             que12.update_status(que12.answer, 340, '9sentence.png')
-        #  загрузка картинок
+        #  загрузка картинок-табличек с информацией
 
         sloy33 = pygame.sprite.Sprite()
         sloy33.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_03.gif'))
@@ -210,7 +223,7 @@ def game():
         que13 = Question(positkarti - 960 + 3560, 700, sprites_questions, questions[3])
         if (positkarti == -958) and (1600 < posit[0] < 1700) and posit[1] < 400:
             que13.update_status(que13.answer, 340, '8sentence.png')
-        #  загрузка картинки
+        #  загрузка картинок-табличек с информацией
 
         sloy34 = pygame.sprite.Sprite()
         sloy34.image = pygame.image.load(os.path.join('data', 'verkhniy_sloy_04.gif'))
@@ -272,24 +285,25 @@ def game():
 
 
 def records():
+    """функция, выводящая рекорды на экран"""
     global flag
-    # функция выводящая рекорды на экран
     screen.fill('black')
     ress = pygame.sprite.Group()
     schooll = pygame.sprite.Sprite()
     # создание спрайтов
     schooll.image = pygame.image.load(os.path.join('data', 'school.jpg'))
     schooll.rect = schooll.image.get_rect()
-    # загрузка изображения
+    # загрузка фонового изображения
     ress.add(schooll)
     ress.draw(screen)
     flag = 2
     print_results()
-    # запуск вспомогательной функции и отрисовка
+    # запуск отрисовки
     pygame.display.flip()
 
 
-def vivod(rights_answer):
+def vivod(right_answers):
+    """Функция, выводящая результат игрока после прохождения теста"""
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -304,12 +318,13 @@ def vivod(rights_answer):
     manager = pygame_gui.UIManager((1920, 1080))
 
     font2 = pygame.font.Font(None, 50)
-    text2 = font2.render('Поздравляю, ваш результат: ' + str(rights_answer) + ' / 13', True, 'black')
+    text2 = font2.render('Поздравляю, ваш результат: ' + str(right_answers) + ' / 13', True, 'black')
     text_x2 = 650
     text_y2 = 500
     background.blit(text2, (text_x2, text_y2))
-    # написание текста
+    # написание текста о результате
 
+    # собственно отображение страницы с помощью петли
     while True:
         time_delta = clock.tick(60) / 1000.0
         for event in pygame.event.get():
@@ -322,10 +337,12 @@ def vivod(rights_answer):
 
 
 def level_queistion13(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 13"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -333,6 +350,7 @@ def level_queistion13(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -386,17 +404,18 @@ def level_queistion13(nick, rights_answer, n):
                         cur.execute('''INSERT INTO result(name, result) VALUES (?, ?)''',
                                     (nick, rights_answer))
                         con.commit()
-                        # доб в бд
+                        # доб в бд при неверном выборе ответа
                         vivod(rights_answer)
                     if event.ui_element == button_answer2:
                         rights_answer += 1
                         cur.execute('''INSERT INTO result(name, result) VALUES (?, ?)''',
                                     (nick, rights_answer))
-                        # доб в бд
+                        # доб в бд при правильном выборе ответа
                         con.commit()
                         vivod(rights_answer)
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -404,10 +423,12 @@ def level_queistion13(nick, rights_answer, n):
 
 
 def level_queistion12(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 12"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -415,6 +436,7 @@ def level_queistion12(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -473,6 +495,7 @@ def level_queistion12(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -480,10 +503,12 @@ def level_queistion12(nick, rights_answer, n):
 
 
 def level_queistion11(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 11"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -491,6 +516,7 @@ def level_queistion11(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -549,6 +575,7 @@ def level_queistion11(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -556,10 +583,12 @@ def level_queistion11(nick, rights_answer, n):
 
 
 def level_queistion10(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 10"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -567,6 +596,7 @@ def level_queistion10(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -625,6 +655,7 @@ def level_queistion10(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -632,10 +663,12 @@ def level_queistion10(nick, rights_answer, n):
 
 
 def level_queistion9(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 9"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -643,6 +676,7 @@ def level_queistion9(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -701,6 +735,7 @@ def level_queistion9(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -708,10 +743,12 @@ def level_queistion9(nick, rights_answer, n):
 
 
 def level_queistion8(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 8"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -719,6 +756,7 @@ def level_queistion8(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -777,6 +815,7 @@ def level_queistion8(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отображение страницы
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -784,10 +823,12 @@ def level_queistion8(nick, rights_answer, n):
 
 
 def level_queistion7(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 7"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -795,6 +836,7 @@ def level_queistion7(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -853,6 +895,7 @@ def level_queistion7(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -860,10 +903,12 @@ def level_queistion7(nick, rights_answer, n):
 
 
 def level_queistion6(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 6"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -871,6 +916,7 @@ def level_queistion6(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -929,6 +975,7 @@ def level_queistion6(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -936,10 +983,12 @@ def level_queistion6(nick, rights_answer, n):
 
 
 def level_queistion5(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 5"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -947,6 +996,7 @@ def level_queistion5(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -1005,6 +1055,7 @@ def level_queistion5(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -1012,10 +1063,12 @@ def level_queistion5(nick, rights_answer, n):
 
 
 def level_queistion4(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 4"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -1023,6 +1076,7 @@ def level_queistion4(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -1081,6 +1135,7 @@ def level_queistion4(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -1088,10 +1143,12 @@ def level_queistion4(nick, rights_answer, n):
 
 
 def level_queistion3(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 3"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -1099,6 +1156,7 @@ def level_queistion3(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -1157,6 +1215,7 @@ def level_queistion3(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -1164,10 +1223,12 @@ def level_queistion3(nick, rights_answer, n):
 
 
 def level_queistion2(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 2"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
@@ -1175,6 +1236,7 @@ def level_queistion2(nick, rights_answer, n):
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -1233,6 +1295,7 @@ def level_queistion2(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -1240,18 +1303,22 @@ def level_queistion2(nick, rights_answer, n):
 
 
 def level_queistion(nick, rights_answer, n):
+    """Функция, отвечающая за отображение вопроса 1"""
     con = sqlite3.connect('results.sqlite3')
     cur = con.cursor()
     con1 = sqlite3.connect('quesions.sqlite3')
     # открытие бд
+
     cur1 = con1.cursor()
     question = cur1.execute("""SELECT * FROM question""").fetchall()
     quest, key_quest = [], []
     # подключение к бд
+
     for i in question:
         quest.append(i[1])
         key_quest.append(str(i[2]))
     # сортировка бд
+
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((1920, 1080))
@@ -1310,6 +1377,7 @@ def level_queistion(nick, rights_answer, n):
                         # переход к след вопросу
             manager.process_events(event)
 
+        # отрисовка окна
         manager.update(time_delta)
         window_surface.blit(background, (0, 0))
         manager.draw_ui(window_surface)
@@ -1317,6 +1385,7 @@ def level_queistion(nick, rights_answer, n):
 
 
 def namefunc():
+    """Функция, отвечающая за тест игры"""
     pygame.init()
     # создание нового окна
 
